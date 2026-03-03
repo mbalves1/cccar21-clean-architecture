@@ -1,17 +1,14 @@
 import AccountDAO from './AccountDAO';
 import AccountAssetDAO from './AccountAssetDAO';
 import { inject } from './Registry';
+import AccountRepository from './AccountRepository';
 
 export default class GetAccount {
-	@inject('accountDAO')
-	accountDAO!: AccountDAO;
-	@inject('accountAssetDAO')
-	accountAssetDAO!: AccountAssetDAO;
+	@inject('accountRepository')
+	accountRepository!: AccountRepository;
 
 	async execute(accountId: string): Promise<Output> {
-		const account = await this.accountDAO.getById(accountId);
-		if (!account) throw new Error('Account not found!');
-		account.balances = await this.accountAssetDAO.getByAccountId(accountId);
+		const account = await this.accountRepository.getById(accountId);
 		return account;
 	}
 }
@@ -22,5 +19,5 @@ type Output = {
 	email: string;
 	document: string;
 	password: string;
-	balances: { asset_id: string; quantity: number }[];
+	balances: { assetId: string; quantity: number }[];
 };

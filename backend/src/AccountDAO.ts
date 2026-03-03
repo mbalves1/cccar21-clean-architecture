@@ -3,6 +3,7 @@ import { inject } from './Registry';
 
 export default interface AccountDAO {
 	save(account: any): Promise<void>;
+	update(account: any): Promise<void>;
 	getById(accountId: string): Promise<any>;
 }
 
@@ -24,6 +25,20 @@ export class AccountDAODatabase implements AccountDAO {
 		);
 	}
 
+	async update(account: any): Promise<void> {
+		await this.connection.query(
+			'update cccar.account set name = $1, email = $2, document = 3$, password = 4$ where account_id = $5',
+			[
+				account.name,
+				account.email,
+				account.document,
+				account.password,
+				account.message,
+				account.accountId,
+			],
+		);
+	}
+
 	async getById(accountId: string): Promise<any> {
 		const [account] = await this.connection.query(
 			'select * from cccar.account where account_id = $1',
@@ -38,6 +53,10 @@ export class AccountDAOMemory implements AccountDAO {
 
 	async save(account: any): Promise<void> {
 		this.accounts.push(account);
+	}
+
+	update(account: any): Promise<void> {
+		throw new Error('Method not implement');
 	}
 
 	async getById(accountId: string): Promise<any> {

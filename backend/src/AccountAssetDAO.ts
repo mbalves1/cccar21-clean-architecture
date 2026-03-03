@@ -4,6 +4,7 @@ import { inject } from './Registry';
 export default interface AccountAssetDAO {
 	save(account: any): Promise<void>;
 	update(account: any): Promise<void>;
+	deleteByAccountId(accountId: string): Promise<any>;
 	getByAccountId(accountId: string): Promise<any>;
 }
 
@@ -32,5 +33,12 @@ export class AccountAssetDAODatabase implements AccountAssetDAO {
 		);
 
 		return accountAssets;
+	}
+
+	async deleteByAccountId(accountId: string): Promise<any> {
+		await this.connection.query(
+			'delete from cccar.account_asset where account_id = $1',
+			[accountId],
+		);
 	}
 }

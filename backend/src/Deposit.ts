@@ -1,17 +1,16 @@
 import AccountDAO from './AccountDAO';
 import AccountAssetDAO from './AccountAssetDAO';
+import AccountRepository from './AccountRepository';
 import { inject } from './Registry';
 
 export default class GetAccount {
-	@inject('accountDAO')
-	accountDAO!: AccountDAO;
-	@inject('accountAssetDAO')
-	accountAssetDAO!: AccountAssetDAO;
+	@inject('accountRepository')
+	accountRepository!: AccountRepository;
 
 	async execute(input: Input): Promise<void> {
-		const account = await this.accountDAO.getById(input.accountId);
-		if (!account) throw new Error('Account not found!');
-		await this.accountAssetDAO.save(input);
+		const account = await this.accountRepository.getById(input.accountId);
+		account.deposit(input.assetId, input.quantity);
+		await this.accountRepository.update(account);
 	}
 }
 

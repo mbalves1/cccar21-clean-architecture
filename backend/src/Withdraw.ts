@@ -1,30 +1,16 @@
 import AccountDAO from './AccountDAO';
 import AccountAssetDAO from './AccountAssetDAO';
 import { inject } from './Registry';
+import AccountRepository from './AccountRepository';
 
 export default class Withdraw {
-	@inject('accountDAO')
-	accountDAO!: AccountDAO;
-	@inject('accountAssetDAO')
-	accountAssetDAO!: AccountAssetDAO;
+	@inject('accountRepository')
+	accountRepository!: AccountRepository;
 
 	async execute(input: Input): Promise<void> {
-		const account = await this.accountDAO.getById(input.accountId);
-		if (!account) throw new Error('Account not found');
-		account.balances = await this.accountAssetDAO.getByAccountId(
-			input.accountId,
-		);
-
-		const balance = account.balances.find(
-			(balance: any) => balance.asset_id === input.assetId,
-		);
-		const quantity = parseFloat(balance.quantity) - input.quantity;
-		if (quantity < 0) throw new Error('Insuficient');
-		await this.accountAssetDAO.update({
-			accountId: input.accountId,
-			assetId: input.assetId,
-			quantity,
-		});
+		const account = await this.accountRepository.getById(input.accountId);
+		account.withdraw(input.assetId, input.quantity);
+		await this.accountRepository.update(account);
 	}
 }
 

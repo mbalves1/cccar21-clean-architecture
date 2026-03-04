@@ -1,5 +1,3 @@
-import AccountDAO from './AccountDAO';
-import AccountAssetDAO from './AccountAssetDAO';
 import AccountRepository from './AccountRepository';
 import { inject } from './Registry';
 

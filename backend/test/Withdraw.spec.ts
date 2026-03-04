@@ -8,6 +8,7 @@ import Signup from '../src/Signup';
 import GetAccount from '../src/GetAccount';
 import Deposit from '../src/Deposit';
 import Withdraw from '../src/Withdraw';
+import { AccountRepositoryDatabase } from '../src/AccountRepository';
 
 let connection: DatabaseConnection;
 let signup: Signup;
@@ -23,6 +24,10 @@ beforeEach(() => {
 	Registry.getInstance().provide(
 		'accountAssetDAO',
 		new AccountAssetDAODatabase(),
+	);
+	Registry.getInstance().provide(
+		'accountRepository',
+		new AccountRepositoryDatabase(),
 	);
 	signup = new Signup();
 	getAccount = new GetAccount();
@@ -52,8 +57,8 @@ test('Deve sacar de uma conta', async () => {
 	};
 	await withdraw.execute(inputWithDraw);
 	const outputGetAccount = await getAccount.execute(outputSignup.accountId);
-	expect(outputGetAccount.balances[0].asset_id).toBe('USD');
-	expect(outputGetAccount.balances[0].quantity).toBe('700');
+	expect(outputGetAccount.balances[0].assetId).toBe('USD');
+	expect(outputGetAccount.balances[0].quantity).toBe(700);
 });
 
 afterEach(async () => {

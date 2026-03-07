@@ -1,5 +1,5 @@
-import DatabaseConnection from './DatabaseConnection';
-import { inject } from './Registry';
+import DatabaseConnection from '../database/DatabaseConnection';
+import { inject } from '../di/Registry';
 
 export default interface AccountAssetDAO {
 	save(account: any): Promise<void>;

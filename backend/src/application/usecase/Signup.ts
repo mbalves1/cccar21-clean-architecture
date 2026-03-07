@@ -1,6 +1,6 @@
-import Account from './Account';
-import AccountRepository from './AccountRepository';
-import { inject } from './Registry';
+import Account from '../../domain/Account';
+import AccountRepository from '../../infra/repository/AccountRepository';
+import { inject } from '../../infra/di/Registry';
 
 export default class Signup {
 	@inject('accountRepository')

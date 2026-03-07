@@ -1,12 +1,15 @@
-import { AccountDAODatabase, AccountDAOMemory } from '../src/AccountDAO';
-import AccountService from '../src/AccountService';
+import AccountService from '../../src/application/service/AccountService';
 import sinon from 'sinon';
-import Registry from '../src/Registry';
-import { AccountAssetDAODatabase } from '../src/AccountAssetDAO';
+import Registry from '../../src/infra/di/Registry';
+import {
+	AccountDAODatabase,
+	AccountDAOMemory,
+} from './../../src/infra/dao/AccountDAO';
+import { AccountAssetDAODatabase } from './../../src/infra/dao/AccountAssetDAO';
 import crypto from 'crypto';
 import DatabaseConnection, {
 	PgPromiseAdapter,
-} from '../src/DatabaseConnection';
+} from './../../src/infra/database/DatabaseConnection';
 
 let connection: DatabaseConnection;
 let accountService: AccountService;

@@ -1,4 +1,4 @@
-import { validateEmail } from '../src/validateEmail';
+import { validateEmail } from '../../src/domain/validateEmail';
 
 test.each(['joedoe@email.com'])('Deve validar o email: %s', (email: string) => {
 	const isValid = validateEmail(email);

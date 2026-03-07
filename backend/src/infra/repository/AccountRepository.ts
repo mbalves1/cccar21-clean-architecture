@@ -1,7 +1,7 @@
-import Account from './Account';
-import AccountAssetDAO from './AccountAssetDAO';
-import AccountDAO from './AccountDAO';
-import { inject } from './Registry';
+import Account from '../../domain/Account';
+import AccountAssetDAO from '../dao/AccountAssetDAO';
+import AccountDAO from '../dao/AccountDAO';
+import { inject } from '../di/Registry';
 
 export default interface AccountRepository {
 	save(account: Account): Promise<void>;

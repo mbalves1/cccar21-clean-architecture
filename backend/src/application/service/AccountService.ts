@@ -1,12 +1,12 @@
 import crypto from 'crypto';
 import pgp from 'pg-promise';
-import { validateCpf } from './validateCpf';
-import { validatePassword } from './validatePassword';
-import { validateEmail } from './validateEmail';
-import { validateName } from './validateName';
-import AccountDAO, { AccountDAODatabase } from './AccountDAO';
-import AccountAssetDAO from './AccountAssetDAO';
-import { inject } from './Registry';
+import { validateCpf } from '../../domain/validateCpf';
+import { validatePassword } from '../../domain/validatePassword';
+import { validateEmail } from '../../domain/validateEmail';
+import { validateName } from '../../domain/validateName';
+import AccountDAO from '../../infra/dao/AccountDAO';
+import AccountAssetDAO from '../../infra/dao/AccountAssetDAO';
+import { inject } from '../../infra/di/Registry';
 
 export default class AccountService {
 	@inject('accountDAO')

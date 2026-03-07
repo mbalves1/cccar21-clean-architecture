@@ -1,5 +1,5 @@
-import DatabaseConnection from './DatabaseConnection';
-import { inject } from './Registry';
+import DatabaseConnection from '../database/DatabaseConnection';
+import { inject } from '../di/Registry';
 
 export default interface AccountDAO {
 	save(account: any): Promise<void>;
@@ -20,20 +20,18 @@ export class AccountDAODatabase implements AccountDAO {
 				account.email,
 				account.document,
 				account.password,
-				account.message,
 			],
 		);
 	}
 
 	async update(account: any): Promise<void> {
 		await this.connection.query(
-			'update cccar.account set name = $1, email = $2, document = 3$, password = 4$ where account_id = $5',
+			'update cccar.account set name = $1, email = $2, document = $3, password = $4 where account_id = $5',
 			[
 				account.name,
 				account.email,
 				account.document,
 				account.password,
-				account.message,
 				account.accountId,
 			],
 		);

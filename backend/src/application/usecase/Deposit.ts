@@ -1,5 +1,5 @@
-import AccountRepository from './AccountRepository';
-import { inject } from './Registry';
+import AccountRepository from '../../infra/repository/AccountRepository';
+import { inject } from '../../infra/di/Registry';
 
 export default class GetAccount {
 	@inject('accountRepository')

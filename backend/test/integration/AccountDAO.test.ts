@@ -1,7 +1,7 @@
 import crypto from 'crypto';
-import { AccountDAODatabase } from '../src/AccountDAO';
-import Registry from '../src/Registry';
-import { PgPromiseAdapter } from '../src/DatabaseConnection';
+import { PgPromiseAdapter } from './../../src/infra/database/DatabaseConnection';
+import Registry from '../../src/infra/di/Registry';
+import { AccountDAODatabase } from './../../src/infra/dao/AccountDAO';
 
 test('Deve persistir uma conta', async () => {
 	const connection = new PgPromiseAdapter();

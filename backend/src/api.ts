@@ -1,12 +1,13 @@
-import { AccountDAODatabase } from './AccountDAO';
-import { AccountAssetDAODatabase } from './AccountAssetDAO';
-import AccountService from './AccountService';
-import Registry from './Registry';
-import { ExpressAdapter } from './HttpServer';
-import { PgPromiseAdapter } from './DatabaseConnection';
-import AccountController from './AccountController';
-import Signup from './Signup';
-import GetAccount from './GetAccount';
+import { AccountDAODatabase } from './infra/dao/AccountDAO';
+import { AccountAssetDAODatabase } from './infra/dao/AccountAssetDAO';
+import AccountService from './application/service/AccountService';
+import Registry from './infra/di/Registry';
+import { ExpressAdapter } from './infra/http/HttpServer';
+import { PgPromiseAdapter } from './infra/database/DatabaseConnection';
+import AccountController from './infra/controller/AccountController';
+import Signup from './application/usecase/Signup';
+import GetAccount from './application/usecase/GetAccount';
+import { AccountRepositoryDatabase } from './infra/repository/AccountRepository';
 
 // Entrypoint
 async function main() {
@@ -16,6 +17,10 @@ async function main() {
 	Registry.getInstance().provide(
 		'accountAssetDAO',
 		new AccountAssetDAODatabase(),
+	);
+	Registry.getInstance().provide(
+		'accountRepository',
+		new AccountRepositoryDatabase(),
 	);
 	Registry.getInstance().provide('accountService', new AccountService());
 	Registry.getInstance().provide('httpServer', httpServer);

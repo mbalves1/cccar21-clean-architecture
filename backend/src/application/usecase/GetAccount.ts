@@ -1,7 +1,7 @@
-import AccountDAO from './AccountDAO';
-import AccountAssetDAO from './AccountAssetDAO';
-import { inject } from './Registry';
-import AccountRepository from './AccountRepository';
+import AccountDAO from '../../infra/dao/AccountDAO';
+import AccountAssetDAO from '../../infra/dao/AccountAssetDAO';
+import { inject } from '../../infra/di/Registry';
+import AccountRepository from '../../infra/repository/AccountRepository';
 
 export default class GetAccount {
 	@inject('accountRepository')

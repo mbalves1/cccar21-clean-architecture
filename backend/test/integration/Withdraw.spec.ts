@@ -1,14 +1,14 @@
-import { AccountDAODatabase } from '../src/AccountDAO';
-import Registry from '../src/Registry';
-import { AccountAssetDAODatabase } from '../src/AccountAssetDAO';
+import Withdraw from '../../src/application/usecase/Withdraw';
+import { AccountRepositoryDatabase } from '../../src/infra/repository/AccountRepository';
+import Deposit from '../../src/application/usecase/Deposit';
+import GetAccount from '../../src/application/usecase/GetAccount';
+import Signup from '../../src/application/usecase/Signup';
+import { AccountAssetDAODatabase } from '../../src/infra/dao/AccountAssetDAO';
+import { AccountDAODatabase } from '../../src/infra/dao/AccountDAO';
 import DatabaseConnection, {
 	PgPromiseAdapter,
-} from '../src/DatabaseConnection';
-import Signup from '../src/Signup';
-import GetAccount from '../src/GetAccount';
-import Deposit from '../src/Deposit';
-import Withdraw from '../src/Withdraw';
-import { AccountRepositoryDatabase } from '../src/AccountRepository';
+} from '../../src/infra/database/DatabaseConnection';
+import Registry from '../../src/infra/di/Registry';
 
 let connection: DatabaseConnection;
 let signup: Signup;

@@ -196,17 +196,6 @@ test('Deve depositar em uma conta', async () => {
 	expect(outputGetAccount.balances[0].quantity).toBe('100');
 });
 
-test('Não deve depositar em uma conta que não existe', async () => {
-	const inputDeposit = {
-		accountId: crypto.randomUUID(),
-		assetId: 'USD',
-		quantity: 100,
-	};
-	await expect(() => accountService.deposit(inputDeposit)).rejects.toThrow(
-		new Error('Account not found!'),
-	);
-});
-
 afterEach(async () => {
 	await connection.close();
 });

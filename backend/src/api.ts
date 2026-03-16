@@ -1,6 +1,6 @@
 import { AccountDAODatabase } from './infra/dao/AccountDAO';
 import { AccountAssetDAODatabase } from './infra/dao/AccountAssetDAO';
-import AccountService from './application/service/AccountService';
+// import AccountService from './application/service/AccountService';
 import Registry from './infra/di/Registry';
 import { ExpressAdapter } from './infra/http/HttpServer';
 import { PgPromiseAdapter } from './infra/database/DatabaseConnection';
@@ -22,7 +22,7 @@ async function main() {
 		'accountRepository',
 		new AccountRepositoryDatabase(),
 	);
-	Registry.getInstance().provide('accountService', new AccountService());
+	// Registry.getInstance().provide('accountService', new AccountService());
 	Registry.getInstance().provide('httpServer', httpServer);
 	Registry.getInstance().provide('signup', new Signup());
 	Registry.getInstance().provide('getAccount', new GetAccount());

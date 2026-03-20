@@ -9,6 +9,9 @@ import DatabaseConnection, {
 	PgPromiseAdapter,
 } from '../../src/infra/database/DatabaseConnection';
 import Registry from '../../src/infra/di/Registry';
+import PlaceOrder from '../../src/application/usecase/PlaceOrder';
+import GetOrder from '../../src/application/usecase/GetOrder';
+import { OrderRepositoryDatabase } from '../../src/infra/repository/OrderRepository';
 
 let connection: DatabaseConnection;
 let signup: Signup;
@@ -30,6 +33,10 @@ beforeEach(() => {
 	Registry.getInstance().provide(
 		'accountRepository',
 		new AccountRepositoryDatabase(),
+	);
+	Registry.getInstance().provide(
+		'orderRepository',
+		new OrderRepositoryDatabase(),
 	);
 	signup = new Signup();
 	getAccount = new GetAccount();

@@ -14,7 +14,18 @@ export class OrderRepositoryDatabase implements OrderRepository {
 	async save(order: Order): Promise<void> {
 		await this.connection.query(
 			'insert into cccar.order (order_id, account_id, market_id, side, quantity, price, fill_quantity, fill_price, status, timestamp) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)',
-			[],
+			[
+				order.orderId,
+				order.accountId,
+				order.marketId,
+				order.side,
+				order.quantity,
+				order.price,
+				order.fillQuantity,
+				order.fillPrice,
+				order.status,
+				order.timestamp,
+			],
 		);
 	}
 

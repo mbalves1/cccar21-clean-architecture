@@ -15,7 +15,7 @@ export default class GetDepth {
 			};
 			index[order.price].quantity += order.quantity;
 		}
-		return Object.values(index);
+		return Object.values(index).sort((a, b) => a.price - b.price);
 	}
 
 	async execute(marketId: string): Promise<Output> {

@@ -19,24 +19,29 @@ export default class PlaceOrder {
 		);
 		await this.orderRepository.save(order);
 
-		const orders = await this.orderRepository.getByMarketIdAndStatus(
-			input.marketId,
-			'open',
-		);
-		const buys = orders
-			.filter((order: Order) => order.side === 'buy')
-			.sort((a, b) => b.price - a.price);
-		const sells = orders
-			.filter((order: Order) => order.side === 'sell')
-			.sort((a, b) => a.price - b.price);
-		const highestBuy = buys[0];
-		const lowestSell = sells[0];
+		while (true) {
+			const orders = await this.orderRepository.getByMarketIdAndStatus(
+				input.marketId,
+				'open',
+			);
+			const buys = orders
+				.filter((order: Order) => order.side === 'buy')
+				.sort((a, b) => b.price - a.price);
+			const sells = orders
+				.filter((order: Order) => order.side === 'sell')
+				.sort((a, b) => a.price - b.price);
+			const highestBuy = buys[0];
+			const lowestSell = sells[0];
 
-		if (!highestBuy || !lowestSell || highestBuy.price < lowestSell.price) {
-			console.log('Not match');
-		} else {
-			highestBuy.fill();
-			lowestSell.fill();
+			if (!highestBuy || !lowestSell || highestBuy.price < lowestSell.price)
+				break;
+
+			const fillQuantity = Math.min(
+				highestBuy.getAvailableQuantity(),
+				lowestSell.getAvailableQuantity(),
+			);
+			highestBuy.fill(fillQuantity);
+			lowestSell.fill(fillQuantity);
 			await this.orderRepository.update(highestBuy);
 			await this.orderRepository.update(lowestSell);
 		}

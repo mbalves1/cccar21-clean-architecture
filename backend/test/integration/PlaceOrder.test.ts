@@ -13,6 +13,8 @@ import PlaceOrder from '../../src/application/usecase/PlaceOrder';
 import GetOrder from '../../src/application/usecase/GetOrder';
 import { OrderRepositoryDatabase } from '../../src/infra/repository/OrderRepository';
 import GetDepth from '../../src/application/usecase/GetDepth';
+import { MediatorMemory } from '../../src/infra/mediator/Mediator';
+import ExecuteOrder from '../../src/application/usecase/ExecuteOrder';
 
 let connection: DatabaseConnection;
 let signup: Signup;
@@ -40,6 +42,8 @@ beforeEach(() => {
 		'orderRepository',
 		new OrderRepositoryDatabase(),
 	);
+	const mediator = new MediatorMemory();
+	Registry.getInstance().provide('mediator', mediator);
 	signup = new Signup();
 	getAccount = new GetAccount();
 	deposit = new Deposit();
@@ -47,6 +51,10 @@ beforeEach(() => {
 	placeOrder = new PlaceOrder();
 	getOrder = new GetOrder();
 	getDepth = new GetDepth();
+	const executeOrder = new ExecuteOrder();
+	mediator.register('orderPlaced', async (event: any) => {
+		await executeOrder.execute(event.marketId);
+	});
 });
 
 test('Deve criar uma ordem de compra', async () => {

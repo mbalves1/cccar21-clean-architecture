@@ -2,6 +2,7 @@ import AccountRepository from '../../infra/repository/AccountRepository';
 import { inject } from '../../infra/di/Registry';
 import OrderRepository from '../../infra/repository/OrderRepository';
 import Order from '../../domain/Order';
+import ExecuteOrder from './ExecuteOrder';
 
 export default class PlaceOrder {
 	@inject('accountRepository')
@@ -19,36 +20,8 @@ export default class PlaceOrder {
 		);
 		await this.orderRepository.save(order);
 
-		while (true) {
-			const orders = await this.orderRepository.getByMarketIdAndStatus(
-				input.marketId,
-				'open',
-			);
-			const buys = orders
-				.filter((order: Order) => order.side === 'buy')
-				.sort((a, b) => b.price - a.price);
-			const sells = orders
-				.filter((order: Order) => order.side === 'sell')
-				.sort((a, b) => a.price - b.price);
-			const highestBuy = buys[0];
-			const lowestSell = sells[0];
-
-			if (!highestBuy || !lowestSell || highestBuy.price < lowestSell.price)
-				break;
-
-			const fillQuantity = Math.min(
-				highestBuy.getAvailableQuantity(),
-				lowestSell.getAvailableQuantity(),
-			);
-			const fillPrice =
-				highestBuy.timestamp.getTime() > lowestSell.getAvailableQuantity()
-					? lowestSell.price
-					: highestBuy.price;
-			highestBuy.fill(fillQuantity, fillPrice);
-			lowestSell.fill(fillQuantity, fillPrice);
-			await this.orderRepository.update(highestBuy);
-			await this.orderRepository.update(lowestSell);
-		}
+		const executeOrder = new ExecuteOrder();
+		await executeOrder.execute(input.marketId);
 
 		return {
 			orderId: order.orderId,

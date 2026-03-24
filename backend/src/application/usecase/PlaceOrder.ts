@@ -40,8 +40,12 @@ export default class PlaceOrder {
 				highestBuy.getAvailableQuantity(),
 				lowestSell.getAvailableQuantity(),
 			);
-			highestBuy.fill(fillQuantity);
-			lowestSell.fill(fillQuantity);
+			const fillPrice =
+				highestBuy.timestamp.getTime() > lowestSell.getAvailableQuantity()
+					? lowestSell.price
+					: highestBuy.price;
+			highestBuy.fill(fillQuantity, fillPrice);
+			lowestSell.fill(fillQuantity, fillPrice);
 			await this.orderRepository.update(highestBuy);
 			await this.orderRepository.update(lowestSell);
 		}

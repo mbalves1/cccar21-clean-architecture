@@ -239,12 +239,58 @@ test('Deve criar duas ordens de compra e uima ordem de venda, no mesmo valor e m
 		accountId: outputSignup.accountId,
 		marketId,
 		side: 'sell',
-		quantity: 2,
+		quantity: 3,
 		price: 85000,
 	});
 	const outputGetDepth = await getDepth.execute(marketId);
 	expect(outputGetDepth.buys).toHaveLength(0);
+	expect(outputGetDepth.sells).toHaveLength(1);
+});
+
+test('Deve criar 3 ordens de compra e venda, com valores diferentes', async () => {
+	const marketId = `BTC/USD/${Math.random()}`;
+	const input = {
+		name: 'John Doe',
+		email: 'john.doe@email.com',
+		document: '07830021066',
+		password: 'mnbVCX1234',
+	};
+
+	const outputSignup = await signup.execute(input);
+	const inputDeposit = {
+		accountId: outputSignup.accountId,
+		assetId: 'USD',
+		quantity: 10000000,
+	};
+	await deposit.execute(inputDeposit);
+	await placeOrder.execute({
+		accountId: outputSignup.accountId,
+		marketId,
+		side: 'sell',
+		quantity: 1,
+		price: 82000,
+	});
+	await placeOrder.execute({
+		accountId: outputSignup.accountId,
+		marketId,
+		side: 'sell',
+		quantity: 1,
+		price: 84000,
+	});
+	const outputPlaceOrder3 = await placeOrder.execute({
+		accountId: outputSignup.accountId,
+		marketId,
+		side: 'buy',
+		quantity: 2,
+		price: 85000,
+	});
+
+	const outputGetDepth = await getDepth.execute(marketId);
+	expect(outputGetDepth.buys).toHaveLength(0);
 	expect(outputGetDepth.sells).toHaveLength(0);
+	const outputGetOrder3 = await getOrder.execute(outputPlaceOrder3.orderId);
+
+	console.log('order3', outputGetOrder3);
 });
 
 afterEach(async () => {

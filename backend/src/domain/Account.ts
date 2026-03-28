@@ -3,22 +3,28 @@ import { validatePassword } from './validatePassword';
 import { validateEmail } from './validateEmail';
 import { validateName } from './validateName';
 import Name from './Name';
+import Email from './Email';
+import Document from './Document';
+import Password from './Password';
 
 export default class Account {
 	balances: Balance[] = [];
 	private name: Name;
+	private email: Email;
+	private document: Document;
+	private password: Password;
 
 	constructor(
 		readonly accountId: string,
 		name: string,
-		readonly email: string,
-		readonly document: string,
-		readonly password: string,
+		email: string,
+		document: string,
+		password: string,
 	) {
 		this.name = new Name(name);
-		if (!validateEmail(email)) throw new Error('Invalid email');
-		if (!validateCpf(document)) throw new Error('Invalid document');
-		if (!validatePassword(password)) throw new Error('Invalid password');
+		this.email = new Email(email);
+		this.document = new Document(document);
+		this.password = new Password(password);
 	}
 
 	static create(
@@ -53,6 +59,18 @@ export default class Account {
 
 	getName() {
 		return this.name.getValue();
+	}
+
+	getEmail() {
+		return this.email.getValue();
+	}
+
+	getDocument() {
+		return this.document.getValue();
+	}
+
+	getPassword() {
+		return this.password.getValue();
 	}
 }
 

@@ -17,9 +17,9 @@ export class AccountDAODatabase implements AccountDAO {
 			[
 				account.accountId,
 				account.getName(),
-				account.email,
-				account.document,
-				account.password,
+				account.getEmail(),
+				account.getDocument(),
+				account.getPassword(),
 			],
 		);
 	}
@@ -28,10 +28,10 @@ export class AccountDAODatabase implements AccountDAO {
 		await this.connection.query(
 			'update cccar.account set name = $1, email = $2, document = $3, password = $4 where account_id = $5',
 			[
-				account.name,
-				account.email,
-				account.document,
-				account.password,
+				account.getName(),
+				account.getEmail(),
+				account.getDocument(),
+				account.getPassword(),
 				account.accountId,
 			],
 		);

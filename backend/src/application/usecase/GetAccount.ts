@@ -12,9 +12,9 @@ export default class GetAccount {
 		return {
 			accountId: account.accountId,
 			name: account.getName(),
-			email: account.email,
-			document: account.document,
-			password: account.password,
+			email: account.getEmail(),
+			document: account.getDocument(),
+			password: account.getPassword(),
 			balances: account.balances,
 		};
 	}

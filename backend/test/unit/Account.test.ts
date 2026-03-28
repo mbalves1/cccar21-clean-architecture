@@ -7,10 +7,10 @@ test('Deve criar uma conta', function () {
 		'078.300.210-66',
 		'asdaaSsd23@',
 	);
-	expect(account.name).toBe('John Doe');
-	expect(account.email).toBe('john.doe@email.com');
-	expect(account.document).toBe('078.300.210-66');
-	expect(account.password).toBe('asdaaSsd23@');
+	expect(account.getName()).toBe('John Doe');
+	expect(account.getEmail()).toBe('john.doe@email.com');
+	expect(account.getDocument()).toBe('078.300.210-66');
+	expect(account.getPassword()).toBe('asdaaSsd23@');
 });
 
 test('Não deve criar uma conta com nome invalido', function () {

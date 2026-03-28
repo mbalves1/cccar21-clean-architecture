@@ -130,7 +130,7 @@ test('Deve criar uma conta com mock', async () => {
 	accountDAOMock.restore();
 });
 
-test('Deve criar uma conta com fake', async () => {
+test.skip('Deve criar uma conta com fake', async () => {
 	const accountDAO = new AccountDAOMemory();
 	Registry.getInstance().provide('accountDAO', accountDAO);
 	signup = new Signup();

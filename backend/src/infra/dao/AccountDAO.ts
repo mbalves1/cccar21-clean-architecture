@@ -16,7 +16,7 @@ export class AccountDAODatabase implements AccountDAO {
 			'insert into cccar.account (account_id, name, email, document, password) values ($1, $2, $3, $4, $5)',
 			[
 				account.accountId,
-				account.name,
+				account.getName(),
 				account.email,
 				account.document,
 				account.password,

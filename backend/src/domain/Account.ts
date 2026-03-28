@@ -2,18 +2,20 @@ import { validateCpf } from './validateCpf';
 import { validatePassword } from './validatePassword';
 import { validateEmail } from './validateEmail';
 import { validateName } from './validateName';
+import Name from './Name';
 
 export default class Account {
 	balances: Balance[] = [];
+	private name: Name;
 
 	constructor(
 		readonly accountId: string,
-		readonly name: string,
+		name: string,
 		readonly email: string,
 		readonly document: string,
 		readonly password: string,
 	) {
-		if (!validateName(name)) throw new Error('Invalid name');
+		this.name = new Name(name);
 		if (!validateEmail(email)) throw new Error('Invalid email');
 		if (!validateCpf(document)) throw new Error('Invalid document');
 		if (!validatePassword(password)) throw new Error('Invalid password');
@@ -47,6 +49,10 @@ export default class Account {
 		if (!balance || balance.quantity < quantity)
 			throw new Error('Insuficient funds');
 		balance.quantity -= quantity;
+	}
+
+	getName() {
+		return this.name.getValue();
 	}
 }
 

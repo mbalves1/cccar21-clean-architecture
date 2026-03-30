@@ -1,11 +1,8 @@
-import { validateCpf } from './validateCpf';
-import { validatePassword } from './validatePassword';
-import { validateEmail } from './validateEmail';
-import { validateName } from './validateName';
 import Name from './Name';
 import Email from './Email';
 import Document from './Document';
 import Password from './Password';
+import Order from './Order';
 
 export default class Account {
 	balances: Balance[] = [];
@@ -55,6 +52,14 @@ export default class Account {
 		if (!balance || balance.quantity < quantity)
 			throw new Error('Insuficient funds');
 		balance.quantity -= quantity;
+	}
+
+	getBalances(assetId: string) {
+		const balance = this.balances.find(
+			(balance: Balance) => balance.assetId === assetId,
+		);
+		if (!balance) return;
+		return balance;
 	}
 
 	getName() {

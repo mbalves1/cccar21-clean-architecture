@@ -1,12 +1,16 @@
+import { inject } from '../infra/di/Registry';
+import Mediator from '../infra/mediator/Mediator';
 import Order from './Order';
 
 export default class Book {
+	@inject('Mediator')
+	mediator!: Mediator;
 	buys: Order[] = [];
 	sells: Order[] = [];
 
 	constructor(readonly marketId: string) {}
 
-	insert(order: Order) {
+	async insert(order: Order) {
 		if (order.side === 'buy') {
 			this.buys.push(order);
 			this.buys.sort((a, b) => b.price - a.price);
@@ -15,10 +19,10 @@ export default class Book {
 			this.sells.push(order);
 			this.sells.sort((a, b) => a.price - b.price);
 		}
-		this.execute();
+		await this.execute();
 	}
 
-	execute() {
+	async execute() {
 		while (true) {
 			const highestBuy = this.buys[0];
 			const lowestSell = this.sells[0];
@@ -43,8 +47,8 @@ export default class Book {
 			if (lowestSell.status === 'closed')
 				this.sells.splice(this.sells.indexOf(lowestSell), 1);
 
-			// await this.orderRepository.update(highestBuy);
-			// await this.orderRepository.update(lowestSell);
+			await this.mediator.notifyAll('orderFilled', highestBuy);
+			await this.mediator.notifyAll('orderFilled', lowestSell);
 		}
 	}
 }

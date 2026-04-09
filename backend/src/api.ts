@@ -18,10 +18,12 @@ import ExecuteOrder from './application/usecase/ExecuteOrder';
 import { MediatorMemory } from './infra/mediator/Mediator';
 import Book from './domain/Book';
 import Order from './domain/Order';
+import { OrderHandler1 } from './infra/handler/OrderHandler';
 
 // Entrypoint
 async function main() {
 	const httpServer = new ExpressAdapter();
+	Registry.getInstance().provide('mediator', new MediatorMemory());
 	Registry.getInstance().provide('databaseConnection', new PgPromiseAdapter());
 	Registry.getInstance().provide('accountDAO', new AccountDAODatabase());
 	Registry.getInstance().provide(
@@ -32,8 +34,10 @@ async function main() {
 		'accountRepository',
 		new AccountRepositoryDatabase(),
 	);
-	const orderRepository = new OrderRepositoryDatabase();
-	Registry.getInstance().provide('orderRepository', orderRepository);
+	Registry.getInstance().provide(
+		'orderRepository',
+		new OrderRepositoryDatabase(),
+	);
 	// Registry.getInstance().provide('accountService', new AccountService());
 	Registry.getInstance().provide('httpServer', httpServer);
 	Registry.getInstance().provide('signup', new Signup());
@@ -42,17 +46,12 @@ async function main() {
 	Registry.getInstance().provide('getOrder', new GetOrder());
 	Registry.getInstance().provide('placeOrder', new PlaceOrder());
 	Registry.getInstance().provide('getDepth', new GetDepth());
-	const executeOrder = new ExecuteOrder();
-	const mediator = new MediatorMemory();
-	const book = new Book('BTC-USD');
-	Registry.getInstance().provide('mediator', mediator);
-	mediator.register('orderPlaced', async (order: Order) => {
-		await book.insert(order);
-		// await executeOrder.execute(order.marketId);
-	});
-	mediator.register('orderFilled', async (order: Order) => {
-		await orderRepository.update(order);
-	});
+	Registry.getInstance().provide('executeOrder', new ExecuteOrder());
+	Registry.getInstance().provide('book', new Book('BTC-USD'));
+	const handler = new OrderHandler1();
+	handler.handle();
+
+	new OrderHandler1();
 	new AccountController();
 	new OrderController();
 	httpServer.listen(3000);

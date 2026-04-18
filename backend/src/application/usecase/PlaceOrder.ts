@@ -13,16 +13,17 @@ export default class PlaceOrder {
 	orderRepository!: OrderRepository;
 	@inject('mediator')
 	mediator!: Mediator;
-	@inject('walletRepository')
-	walletRepository!: WalletRepository;
+
+	// @inject('walletRepository')
+	// walletRepository!: WalletRepository;
 
 	async execute(input: Input): Promise<Output> {
-		const wallet = await this.walletRepository.getByAccountId(input.accountId);
-		const [mainAsset, paymentAsset] = input.marketId.split('-');
-		const asset = input.side === 'buy' ? paymentAsset : mainAsset;
-		const balance = wallet.getBalance(asset);
-		if (!balance || balance.quantity < input.quantity)
-			throw new Error('Insufficient funds');
+		// const wallet = await this.walletRepository.getByAccountId(input.accountId);
+		// const [mainAsset, paymentAsset] = input.marketId.split('-');
+		// const asset = input.side === 'buy' ? paymentAsset : mainAsset;
+		// const balance = wallet.getBalance(asset);
+		// if (!balance || balance.quantity < input.quantity)
+		// 	throw new Error('Insufficient funds');
 
 		const order = Order.create(
 			input.accountId,

@@ -1,5 +1,7 @@
 import { PgPromiseAdapter } from '../../src/infra/database/DatabaseConnection';
 import Registry from '../../src/infra/di/Registry';
+import { test, expect } from '@jest/globals';
+import ORM, { AccountModel } from '../../src/infra/orm/ORM';
 
 test('Deve persistir uma conta', async () => {
 	const connection = new PgPromiseAdapter();

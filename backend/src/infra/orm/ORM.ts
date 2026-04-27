@@ -65,6 +65,23 @@ export class AccountModel extends Model {
 	}
 }
 
+@model('cccar', 'account_asset')
+export class AccounAssetModel extends Model {
+	@column('account_id')
+	accountId!: string;
+	@column('asset_id')
+	asset_id!: string;
+	@column('quantity')
+	quantity!: string;
+
+	constructor(accountId: string, asset_id: string, quantity: string) {
+		super();
+		this.accountId = accountId;
+		this.asset_id = asset_id;
+		this.quantity = quantity;
+	}
+}
+
 function model(schema: string, table: string) {
 	return function (target: any) {
 		target.prototype.schema = schema;

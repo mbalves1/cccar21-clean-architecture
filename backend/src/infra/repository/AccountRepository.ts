@@ -2,6 +2,7 @@ import Account from '../../domain/Account';
 import AccountAssetDAO from '../dao/AccountAssetDAO';
 import AccountDAO from '../dao/AccountDAO';
 import { inject } from '../di/Registry';
+import ORM, { AccounAssetModel, AccountModel } from '../orm/ORM';
 
 export default interface AccountRepository {
 	save(account: Account): Promise<void>;
@@ -42,6 +43,61 @@ export class AccountRepositoryDatabase implements AccountRepository {
 		);
 		const accountAssetsData =
 			await this.accountAssetDAO.getByAccountId(accountId);
+		for (const accountAssetData of accountAssetsData) {
+			account.balances.push({
+				assetId: accountAssetData.asset_id,
+				quantity: parseFloat(accountAssetData.quantity),
+			});
+		}
+		return account;
+	}
+}
+
+export class AccountRepositoryORMDatabase implements AccountRepository {
+	@inject('orm')
+	orm!: ORM;
+
+	async save(account: Account): Promise<void> {
+		const accountModel = new AccountModel(
+			account.accountId,
+			account.getName(),
+			account.getEmail(),
+			account.getDocument(),
+			account.getPassword(),
+		);
+		await this.orm.save(accountModel);
+	}
+
+	async update(account: Account): Promise<void> {
+		// await this.accountDAO.update(account);
+		// await this.accountAssetDAO.deleteByAccountId(account.accountId);
+		// for (const balance of account.balances) {
+		// 	await this.accountAssetDAO.save({
+		// 		accountId: account.accountId,
+		// 		...balance,
+		// 	});
+		// }
+	}
+
+	async getById(accountId: string): Promise<Account> {
+		const accountModal = await this.orm.get(
+			AccountModel,
+			'account_id',
+			accountId,
+		);
+		if (!accountModal) throw new Error('Account not found!');
+		const account = new Account(
+			accountModal.account_id,
+			accountModal.name,
+			accountModal.email,
+			accountModal.document,
+			accountModal.password,
+		);
+		const accountAssetsData = await this.orm.get(
+			AccounAssetModel,
+			'account_id',
+			accountId,
+		);
 		for (const accountAssetData of accountAssetsData) {
 			account.balances.push({
 				assetId: accountAssetData.asset_id,

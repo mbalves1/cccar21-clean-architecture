@@ -27,6 +27,21 @@ export default class ORM {
 
 		return obj;
 	}
+
+	async list(model: any, field: string, value: string): Promise<any> {
+		const query = `select * from ${model.prototype.schema}.${model.prototype.table} where ${field} = $1`;
+		const dataList = await this.connection.query(query, value);
+		const objs = [];
+		for (const data of dataList) {
+			const obj = new model();
+			for (const column of model.prototype.columns) {
+				obj[column.property] = data[column.column];
+			}
+			console.log(obj);
+			objs.push(obj);
+		}
+		return objs;
+	}
 }
 
 class Model {

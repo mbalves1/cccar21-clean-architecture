@@ -93,15 +93,15 @@ export class AccountRepositoryORMDatabase implements AccountRepository {
 			accountModal.document,
 			accountModal.password,
 		);
-		const accountAssetsData = await this.orm.get(
+		const accountAssetsModel = await this.orm.list(
 			AccounAssetModel,
 			'account_id',
 			accountId,
 		);
-		for (const accountAssetData of accountAssetsData) {
+		for (const accountAssetModel of accountAssetsModel) {
 			account.balances.push({
-				assetId: accountAssetData.asset_id,
-				quantity: parseFloat(accountAssetData.quantity),
+				assetId: accountAssetModel.asset_id,
+				quantity: parseFloat(accountAssetModel.quantity),
 			});
 		}
 		return account;

@@ -53,7 +53,7 @@ export class AccountRepositoryDatabase implements AccountRepository {
 	}
 }
 
-export class AccountRepositoryORMDatabase implements AccountRepository {
+export class AccountRepositoryORM implements AccountRepository {
 	@inject('orm')
 	orm!: ORM;
 
@@ -80,30 +80,31 @@ export class AccountRepositoryORMDatabase implements AccountRepository {
 	}
 
 	async getById(accountId: string): Promise<Account> {
-		const accountModal = await this.orm.get(
+		const accountModel = await this.orm.get(
 			AccountModel,
 			'account_id',
 			accountId,
 		);
-		if (!accountModal) throw new Error('Account not found!');
+		if (!accountModel) throw new Error('Account not found!');
+		console.log(accountModel);
 		const account = new Account(
-			accountModal.account_id,
-			accountModal.name,
-			accountModal.email,
-			accountModal.document,
-			accountModal.password,
+			accountModel.account_id,
+			accountModel.name,
+			accountModel.email,
+			accountModel.document,
+			accountModel.password,
 		);
-		const accountAssetsModel = await this.orm.list(
-			AccounAssetModel,
-			'account_id',
-			accountId,
-		);
-		for (const accountAssetModel of accountAssetsModel) {
-			account.balances.push({
-				assetId: accountAssetModel.asset_id,
-				quantity: parseFloat(accountAssetModel.quantity),
-			});
-		}
+		// const accountAssetsModel = await this.orm.list(
+		// 	AccounAssetModel,
+		// 	'account_id',
+		// 	accountId,
+		// );
+		// for (const accountAssetModel of accountAssetsModel) {
+		// 	account.balances.push({
+		// 		assetId: accountAssetModel.asset_id,
+		// 		quantity: parseFloat(accountAssetModel.quantity),
+		// 	});
+		// }
 		return account;
 	}
 }

@@ -10,7 +10,7 @@ import Account from '../../src/domain/Account';
 import { test, expect } from '@jest/globals';
 import ORM from '../../src/infra/orm/ORM';
 
-test.skip('Deve persistir uma conta', async () => {
+test('Deve persistir uma conta', async () => {
 	const connection = new PgPromiseAdapter();
 	Registry.getInstance().provide('databaseConnection', connection);
 	Registry.getInstance().provide('orm', new ORM());
@@ -28,7 +28,7 @@ test.skip('Deve persistir uma conta', async () => {
 	const account = Account.create(
 		'John Doe',
 		'john.email@email.com',
-		'999999999',
+		'07830021066',
 		'asdQWD12',
 	);
 	// await accountDAO.save(account);

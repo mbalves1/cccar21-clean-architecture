@@ -66,6 +66,14 @@ export class AccountRepositoryORM implements AccountRepository {
 			account.getPassword(),
 		);
 		await this.orm.save(accountModel);
+		for (const balance of account.balances) {
+			const accountAssetModel = new AccounAssetModel(
+				account.accountId,
+				balance.assetId,
+				balance.quantity.toString(),
+			);
+			await this.orm.save(accountAssetModel);
+		}
 	}
 
 	async update(account: Account): Promise<void> {

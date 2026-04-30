@@ -88,7 +88,7 @@ export class AccountRepositoryORM implements AccountRepository {
 		if (!accountModel) throw new Error('Account not found!');
 		console.log(accountModel);
 		const account = new Account(
-			accountModel.account_id,
+			accountModel.accountId,
 			accountModel.name,
 			accountModel.email,
 			accountModel.document,

@@ -37,7 +37,6 @@ export default class ORM {
 			for (const column of model.prototype.columns) {
 				obj[column.property] = data[column.column];
 			}
-			console.log(obj);
 			objs.push(obj);
 		}
 		return objs;

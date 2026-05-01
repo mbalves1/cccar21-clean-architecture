@@ -2,7 +2,9 @@ import Account from '../../domain/Account';
 import AccountAssetDAO from '../dao/AccountAssetDAO';
 import AccountDAO from '../dao/AccountDAO';
 import { inject } from '../di/Registry';
-import ORM, { AccounAssetModel, AccountModel } from '../orm/ORM';
+import { AccounAssetModel } from '../orm/AccountAssetModel';
+import { AccountModel } from '../orm/AccountModel';
+import ORM from '../orm/ORM';
 
 export default interface AccountRepository {
 	save(account: Account): Promise<void>;

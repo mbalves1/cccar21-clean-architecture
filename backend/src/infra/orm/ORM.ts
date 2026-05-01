@@ -43,67 +43,21 @@ export default class ORM {
 	}
 }
 
-class Model {
+export class Model {
 	schema!: string;
 	table!: string;
 	columns!: { column: string; property: string }[];
 	[property: string]: any;
 }
 
-@model('cccar', 'account')
-export class AccountModel extends Model {
-	@column('account_id')
-	accountId!: string;
-	@column('name')
-	name!: string;
-	@column('email')
-	email!: string;
-	@column('document')
-	document!: string;
-	@column('password')
-	password!: string;
-
-	constructor(
-		accountId: string,
-		name: string,
-		email: string,
-		document: string,
-		password: string,
-	) {
-		super();
-		this.accountId = accountId;
-		this.name = name;
-		this.email = email;
-		this.document = document;
-		this.password = password;
-	}
-}
-
-@model('cccar', 'account_asset')
-export class AccounAssetModel extends Model {
-	@column('account_id')
-	accountId!: string;
-	@column('asset_id')
-	asset_id!: string;
-	@column('quantity')
-	quantity!: string;
-
-	constructor(accountId: string, asset_id: string, quantity: string) {
-		super();
-		this.accountId = accountId;
-		this.asset_id = asset_id;
-		this.quantity = quantity;
-	}
-}
-
-function model(schema: string, table: string) {
+export function model(schema: string, table: string) {
 	return function (target: any) {
 		target.prototype.schema = schema;
 		target.prototype.table = table;
 	};
 }
 
-function column(column: string) {
+export function column(column: string) {
 	return function (target: any, propertyKey: string) {
 		target.columns = target.columns || [];
 		target.columns.push({ column, property: propertyKey });

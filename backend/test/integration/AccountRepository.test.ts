@@ -31,14 +31,19 @@ test('Deve persistir uma conta', async () => {
 		'07830021066',
 		'asdQWD12',
 	);
+	account.deposit('USD', 100000);
+	account.deposit('BTC', 100);
 	// await accountDAO.save(account);
 	await accountRepository.save(account);
 	// const savedAccount = await accountDAO.getById(account.accountId);
 	const savedAccount = await accountRepository.getById(account.accountId);
+	console.log('savedAccount', savedAccount);
 	expect(savedAccount.accountId).toBe(account.accountId);
 	expect(savedAccount.getName()).toBe(account.getName());
 	expect(savedAccount.getEmail()).toBe(account.getEmail());
 	expect(savedAccount.getDocument()).toBe(account.getDocument());
 	expect(savedAccount.getPassword()).toBe(account.getPassword());
+	expect(savedAccount.balances[0].quantity).toBe(100000);
+	expect(savedAccount.balances[1].quantity).toBe(100);
 	await connection.close();
 });

@@ -94,7 +94,7 @@ export class AccountRepositoryORM implements AccountRepository {
 			accountId,
 		);
 		if (!accountModel) throw new Error('Account not found!');
-		console.log(accountModel);
+		console.log('....................', accountModel);
 		const account = new Account(
 			accountModel.accountId,
 			accountModel.name,
@@ -102,17 +102,17 @@ export class AccountRepositoryORM implements AccountRepository {
 			accountModel.document,
 			accountModel.password,
 		);
-		// const accountAssetsModel = await this.orm.list(
-		// 	AccounAssetModel,
-		// 	'account_id',
-		// 	accountId,
-		// );
-		// for (const accountAssetModel of accountAssetsModel) {
-		// 	account.balances.push({
-		// 		assetId: accountAssetModel.asset_id,
-		// 		quantity: parseFloat(accountAssetModel.quantity),
-		// 	});
-		// }
+		const accountAssetsModel = await this.orm.list(
+			AccounAssetModel,
+			'account_id',
+			accountId,
+		);
+		for (const accountAssetModel of accountAssetsModel) {
+			account.balances.push({
+				assetId: accountAssetModel.asset_id,
+				quantity: parseFloat(accountAssetModel.quantity),
+			});
+		}
 		return account;
 	}
 }
